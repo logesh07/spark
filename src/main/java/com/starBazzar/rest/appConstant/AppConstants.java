@@ -1,4 +1,4 @@
-package com.starBazzar.rest.service;
+package com.starBazzar.rest.appConstant;
 
 public final class AppConstants {
 

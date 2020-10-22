@@ -1,9 +1,6 @@
 
 package com.starBazzar.rest.logging;
 
-
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,43 +11,28 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	DataSource dataSource;
-	
+	private CustomAuthenticationService userDetailsService;
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		/*
-		 * auth.inMemoryAuthentication() .withUser("admin") .password("pass")
-		 * .roles("ADMIN");
-		 */
-		auth.jdbcAuthentication()
-		.dataSource(dataSource)
-		.usersByUsernameQuery(
-				"select username,password,enabled"
-				+" from users"
-				+" where username=?")
-		.authoritiesByUsernameQuery(
-				"select username ,authority"
-						+" from authorities"
-						+" where username=?");
-		
-		
+//		auth.authenticationProvider(userDetailsService);
+		auth.inMemoryAuthentication() .withUser("admin") .password("pass")
+		  .roles("ADMIN");
 	}
-
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-		.antMatchers("/**")
-		.hasRole("ADMIN")
-		.and()
-		.formLogin();
+		http.csrf().disable().authorizeRequests()
+		.antMatchers("/**").authenticated()
+				.and().httpBasic();
 	}
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
 	}
+
 }

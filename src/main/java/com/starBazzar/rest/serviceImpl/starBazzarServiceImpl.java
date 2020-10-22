@@ -1,4 +1,4 @@
-package com.starBazzar.rest.service;
+package com.starBazzar.rest.serviceImpl;
 
 import java.util.Map;
 
@@ -11,17 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.starBazzar.rest.appConstant.AppConstants;
 import com.starBazzar.rest.exception.GlobalControllerExceptionHandler;
 
 @Service
-public class starBazzarService extends  GlobalControllerExceptionHandler {
+public class starBazzarServiceImpl extends  GlobalControllerExceptionHandler {
 
 	
 	
 	private RestTemplate restTemplate;
 
-	public starBazzarService() {
-
+	
+	public starBazzarServiceImpl() {
 		this.restTemplate = new RestTemplate();
 	}
 
